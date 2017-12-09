@@ -15,6 +15,6 @@ Route::get('/home', function () {
     return view('welcome');
 });
 
-Route::get('dataSubject/{param}','subjectCtrl@dataSubject');
+//Route::get('dataSubject/{param}','subjectCtrl@dataSubject');
 
 Route::get('dataSplit','subjectCtrl@dataSplit');

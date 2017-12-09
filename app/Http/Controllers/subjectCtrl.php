@@ -14,24 +14,53 @@ class subjectCtrl extends Controller
     {
     	$subjek = subject::where('nama','LIKE','%'.$param.'%')->get();
     	$predic = predikat::where('kata','LIKE','%'.$param.'%')->get();
-    	$objec = objek::where('kata','LIKE','%'.$param.'%')->get();
-    	$tanya = question::where('kata','LIKE','%'.$param.'%')->first();
+    	$objec = objek::where('kata','LIKE','%'.$param.'%')->get();//eksekusi dalam bentuk array
+    	$tanya = question::where('kata','LIKE','%'.$param.'%')->first();//mengecek dalam  satu line
     	if(count($subjek)>0){
-    		return ': s';
+    		//echo ", pattern : ";
+    		return 's';
     	}
     	else if(count($predic)>0){
-    		return ': p';
+    		//echo ", pattern : ";
+    		return 'p';
     	}
     	else if(count($objec)>0){
-    		return ': o';
+    		//echo ", pattern : ";
+    		return 'o';
     	}
     	else if(count($tanya)>0){
-    		return $tanya->pattern;
+    		//echo ", pattern : ";
+    		return 't';
     	}
     	else{
-    		return ': k';
+    		//echo ", pattern : ";
+    		return 'k';
     	}
     	//return count($subjek).count($predic).count($objec);
+    }
+
+    
+    public function dataId($param)
+    {
+    	$subjek = subject::where('nama','LIKE','%'.$param.'%')->get();
+    	$predic = predikat::where('kata','LIKE','%'.$param.'%')->first();
+    	$objec = objek::where('kata','LIKE','%'.$param.'%')->get();//eksekusi dalam bentuk array
+    	$tanya = question::where('kata','LIKE','%'.$param.'%')->first();//mengecek dalam  satu line
+    	if(count($subjek)>0){
+    		return $subjek[0]->id;
+    	}
+    	else if(count($predic)>0){
+    		return $predic->id;
+    	}
+    	else if(count($objec)>0){
+    		return $objec[0]->id;
+    	}
+    	else if(count($tanya)>0){
+    		return $tanya->id;
+    	}
+    	else{
+    		return 'k';
+    	}
     }
 
     public function dataSplit()
@@ -39,7 +68,7 @@ class subjectCtrl extends Controller
     	$string = 'siapa menemukan ikan';
     	$pisah = explode(' ',$string);
     	foreach ($pisah as $key => $value) {
-    		echo $value.$this->dataSubject($value).'<br>';
+    		echo $value.', pattern : '.$this->dataSubject($value).', id : '.$this->dataId($value).'<br>';
     	}
     }
 }
