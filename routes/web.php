@@ -11,6 +11,8 @@
 |
 */
 
-Route::get('/', function () {
+Route::get('/rumah', function () {
     return view('welcome');
 });
+
+Route::get('dataSubject/{param}','subjectCtrl@dataSubject');
