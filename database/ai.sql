@@ -1,15 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.0
+-- version 4.6.5.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 09, 2017 at 03:32 PM
--- Server version: 10.1.25-MariaDB
--- PHP Version: 7.1.7
+-- Generation Time: Dec 09, 2017 at 10:25 AM
+-- Server version: 10.1.21-MariaDB
+-- PHP Version: 7.1.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -19,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `ai`
+-- Database: `AI`
 --
 
 -- --------------------------------------------------------
@@ -60,7 +58,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (5, '2017_12_09_142440_create_objeks_table', 1),
 (6, '2017_12_09_142509_create_relasis_table', 1),
 (7, '2017_12_09_142559_create_formats_table', 1),
-(8, '2017_12_09_142636_create_questions_table', 1);
+(8, '2017_12_09_142636_create_questions_table', 1),
+(9, '2017_12_09_162938_update_table_objek', 2);
 
 -- --------------------------------------------------------
 
@@ -71,8 +70,17 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 CREATE TABLE `objeks` (
   `id` int(10) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `kata` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `objeks`
+--
+
+INSERT INTO `objeks` (`id`, `created_at`, `updated_at`, `kata`) VALUES
+(1, NULL, NULL, 'Ikan'),
+(2, NULL, NULL, 'Baju');
 
 -- --------------------------------------------------------
 
@@ -100,6 +108,15 @@ CREATE TABLE `predikats` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `predikats`
+--
+
+INSERT INTO `predikats` (`id`, `kata`, `id_parent`, `created_at`, `updated_at`) VALUES
+(1, 'Temu', '0', NULL, NULL),
+(2, 'Lahir', '0', NULL, NULL),
+(3, 'Menemukan', '1', NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -113,6 +130,18 @@ CREATE TABLE `questions` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `questions`
+--
+
+INSERT INTO `questions` (`id`, `kata`, `pattern`, `created_at`, `updated_at`) VALUES
+(1, 'Apa', 'qa', NULL, NULL),
+(2, 'Dimana', 'qd', NULL, NULL),
+(3, 'Siapa', 'qs', NULL, NULL),
+(4, 'Bagaimana', 'qb', NULL, NULL),
+(5, 'Kapan', 'qk', NULL, NULL),
+(6, 'Mengapa', 'qm', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -142,6 +171,14 @@ CREATE TABLE `subjects` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `subjects`
+--
+
+INSERT INTO `subjects` (`id`, `nama`, `created_at`, `updated_at`) VALUES
+(1, 'James Watt', NULL, NULL),
+(2, 'James Smith', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -231,22 +268,22 @@ ALTER TABLE `formats`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `objeks`
 --
 ALTER TABLE `objeks`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `predikats`
 --
 ALTER TABLE `predikats`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `questions`
 --
 ALTER TABLE `questions`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `relasis`
 --
@@ -256,13 +293,12 @@ ALTER TABLE `relasis`
 -- AUTO_INCREMENT for table `subjects`
 --
 ALTER TABLE `subjects`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;COMMIT;
-
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
