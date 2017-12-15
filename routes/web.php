@@ -11,10 +11,13 @@
 |
 */
 
+Route::get('/','subjectCtrl@index');
 Route::get('/home', function () {
     return view('welcome');
 });
 
 //Route::get('dataSubject/{param}','subjectCtrl@dataSubject');
 
-Route::get('dataSplit','subjectCtrl@dataSplit');
+Route::any('pengolah','subjectCtrl@pengolah');
+Route::any('dataPattern','subjectCtrl@dataPattern');
+Route::any('dataIdPattern','subjectCtrl@dataIdPattern');
