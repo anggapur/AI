@@ -58,8 +58,22 @@ function cekJawaban(){
 }
 
 var setResponseData = function(data){
-	// alert(data);
-    alert(data.jawabanAkhir);
+	
+    //cek jawaban akhir
+    if(data.polaJawaban == "NONE")
+    {
+        speakTheWord("Maaf Aku Tak Tau Jawabannya");
+    }
+    else
+    {
+        speakTheWord(data.jawabanAkhir);
+    }
 	console.log(data);
 };
 
+// 
+function speakTheWord(kalimat)
+{
+    responsiveVoice.cancel();
+    responsiveVoice.speak(kalimat, "Indonesian Female", {volume: 10 , pitch : 3});
+}

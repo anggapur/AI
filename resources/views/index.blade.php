@@ -263,6 +263,8 @@
     </script>
     <script src="https://cdn.webrtc-experiment.com/commits.js" async> </script>
 
+    <!-- Responsive  voice -->
+    <script src="{{asset('public/js/responsiveVoice.js')}}"></script>
     <!-- Main Js -->
     <script type="text/javascript" src="{{asset('public/js/jquery-1.11.0.min.js')}}"></script>
     <script type="text/javascript" src="{{asset('public/js/main.js')}}"></script>

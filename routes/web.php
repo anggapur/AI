@@ -15,6 +15,7 @@ Route::get('/','subjectCtrl@index');
 Route::get('/home', function () {
     return view('welcome');
 });
+Route::get('/similarity','subjectCtrl@similarity');
 
 //Route::get('dataSubject/{param}','subjectCtrl@dataSubject');
 
