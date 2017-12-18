@@ -75,5 +75,5 @@ var setResponseData = function(data){
 function speakTheWord(kalimat)
 {
     responsiveVoice.cancel();
-    responsiveVoice.speak(kalimat, "Indonesian Female", {volume: 10 , pitch : 3});
+    responsiveVoice.speak(kalimat, "Indonesian Female", {volume: 10});
 }
