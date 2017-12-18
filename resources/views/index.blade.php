@@ -6,8 +6,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-        <link rel="author" type="text/html" href="https://plus.google.com/+MuazKhan">
-        <meta name="author" content="Muaz Khan">
+        <link rel="author" type="text/html" href="https://plus.google.com/+MuazKhan">        
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <link rel="stylesheet" href="{{asset('public/css/style.css')}}">
         <!-- <link rel="stylesheet" href="https://cdn.webrtc-experiment.com/style.css"> -->

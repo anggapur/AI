@@ -11,21 +11,75 @@ use App\question;
 use App\relasi;
 use App\command;
 class subjectCtrl extends Controller
-{
-
+{    
     public $data = [];
+    //Mengecek kesamaan
     public function similarity($param1,$param2){
         similar_text($param1, $param2, $percent); 
         return $percent;
     }
+    //ke halaman index
     public function index(){
         return view('index');
     }
     public function pengolah(Request $request){
+        //hilangkan putih alias spasi yang banyak
         $kalimat = $this->removeDoubleWhiteSpace($request->kalimat);
-
         //save command
         $this->insertToCommand($kalimat,'H');
+        
+        //cek apakah command ada
+        if($this->commandIdentik($kalimat))
+        {
+            $this->cariSebelumnya($kalimat);
+        }
+        else
+        {
+            $this->formatBaku($kalimat);
+        }
+
+        //return data
+        return $this->data;
+    }
+    public function cariSebelumnya($kalimat)
+    {
+        $action = format::where('state','uniq')->pluck('question')->toArray();
+        $query = command::where('command_words','!=',$kalimat)
+                ->whereNotIn('command_words',$action)
+                ->where('command_words','!=','NONE')
+                ->orderBy('id','DESC')->get();
+        $this->data['id'] = $query[0]->id;
+        //cari dengan id sekian    
+        //identik tu responsenya apa
+        $q = format::where('question','LIKE',$kalimat)->get();  
+        //pakai format baku
+        $this->formatBaku2($query[0]->command_words,$q[0]->question);
+    }
+    public function formatBaku2($kalimat,$q){
+        //just doit
+        $this->data['kalimatAsli'] = $this->cekKalimatAsli($kalimat);
+        $this->data['pattern'] = $this->gabungArray($this->dataPattern($kalimat));
+        $this->cekDanGabung();
+        $this->data['idPattern'] = $this->gabungArray($this->dataIdPattern($this->data['kalimatAslis']));
+        // //cek pattern        
+        $this->data['idPatternDasar'] = $this->idPatternDasar($this->data['idPattern'],$this->data['patternBaru']);
+        $this->data['diketahui'] = $this->buatYangDiketahui($this->data['idPatternDasar'],$this->data['patternBaru']);        
+        // // //splittig and save
+        $this->data['polaJawaban'] = $this->polaJawaban($q);
+        $this->data['jawabanAkhir'] = $this->jawabanAkhir($this->data['polaJawaban'],$this->data['diketahui']);
+        // //insert answer
+        // $this->insertToCommand($this->data['jawabanAkhir'],'C');            
+    }
+    public function commandIdentik($kalimat)
+    {
+        $query = format::where('question','LIKE',$kalimat)->get();
+        if(count($query) > 0)
+            return TRUE;
+        else 
+            return FALSE;
+    }
+
+    public function formatBaku($kalimat){
         //just doit
         $this->data['kalimatAsli'] = $this->cekKalimatAsli($kalimat);
         $this->data['pattern'] = $this->gabungArray($this->dataPattern($kalimat));
@@ -42,8 +96,7 @@ class subjectCtrl extends Controller
         $this->data['jawabanAkhir'] = $this->jawabanAkhir($this->data['polaJawaban'],$this->data['diketahui']);
         //insert answer
         $this->insertToCommand($this->data['jawabanAkhir'],'C');
-        //
-        return $this->data;
+        //        
     }
 
     public function insertToCommand($command,$state){
@@ -111,7 +164,7 @@ class subjectCtrl extends Controller
     public function jawabanAkhir($polaJawaban,$diketahui){
         $polaJawaban = explode(" ",$polaJawaban);
         $arrayRecog = ['s','p','o'];
-        $jawab = "";
+        $jawab = [];
         //cari jawaban dulu
         $parameterDiketahui = $this->susunDiketahui($diketahui);
         $query = relasi::leftJoin('subjects','relasis.id_subject','=','subjects.id')
@@ -128,63 +181,65 @@ class subjectCtrl extends Controller
                     )
                     ->first();
         //disusun
+        $i = 0;
         foreach ($polaJawaban as $key => $value) {
             if($value == "s")
             {
-                $jawab.=$query->namaSubject." ";
+                $jawab[$i]=$query->namaSubject;
             }
             else if($value == "p")
             {
                 //cek apakah sebelumnya dia merupakan subject atau object
                 $myPredikat = $this->tentukanBentukPredikat($query->kataPredikat,$polaJawaban[$key-1]);
-                $jawab.=$myPredikat." ";
+                $jawab[$i]=$myPredikat;
             }
             else if($value == "o")
             {
-                $jawab.=$query->kataObjek." ";
+                $jawab[$i]=$query->kataObjek;
             }
             else if($value == "kw")
             {
-                $jawab.=$query->keterangan_waktu." ";
+                $jawab[$i]=$query->keterangan_waktu;
             }
             else if($value == "kt")
             {
-                $jawab.=$query->keterangan_tempat." ";
+                $jawab[$i]=$query->keterangan_tempat;
             }
             else if($value == "kp")
             {
-                $jawab.=$query->keterangan_proses." ";
+                $jawab[$i]=$query->keterangan_proses;
             }
             else if($value == "ka")
             {
-                $jawab.=$query->keterangan_alasan." ";
+                $jawab[$i]=$query->keterangan_alasan;
             }
             else if($value == "do")
             {
-                $jawab.=$query->detail_objek." ";
+                $jawab[$i]=$query->detail_objek;
             }
             else if($value == "do1")
             {
                 // hanya kalimat terdepan
                 $datas = explode(".",$query->detail_objek);
-                $jawab.=$datas[0]." ";
+                $jawab[$i]=$datas[0];
             }
             else if($value == "ds")
             {
-                $jawab.=$query->detail_subject." ";
+                $jawab[$i]=$query->detail_subject;
             }
             else if($value == "ds1")
             {
                 //hanya kalimat terdepan
                 $datas =  explode(".",$query->detail_subject);
-                $jawab.=$datas[0]." ";
+                $jawab[$i]=$datas[0];
             }
             else 
             {
-                $jawab.=$value." ";
+                $jawab[$i]=$value;
             }
+            $i++;
         }
-        return $jawab;
+        return $this->gabungArray($jawab);
     }   
 
     public function tentukanBentukPredikat($predikat,$sebelum)
